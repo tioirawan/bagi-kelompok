@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Bagi Kelompok</title>
+
+  <style>
+    .row, .col, .card {
+      box-sizing: border-box;
+    }
+
+    body {
+      text-align: center;
+        background-color: #34495e;
+        color: #ecf0f1;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    input[type="number"]{
+        margin: 10px;
+        padding: 5px;
+        border-radius: 10px;
+        height: 20px;
+        width: 10em;
+        border: solid #2c3e50;
+    }
+
+    button {
+        margin: 10px;
+        padding: 8px;
+        border-radius: 10px;
+        background-color: #2ecc71;
+        border: solid 2px #27ae60;
+        color: inherit;
+        font-weight: bold;
+        width: 100px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .row {
+      text-align:center;
+      height:450px;
+      margin: 0 10vh;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .col {
+      width: 30%;
+      margin: 10px;
+      float: left;
+    margin: 10px 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      .col {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      text-align: center;
+      border: solid #2980b9;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bagi Kelompok</h1>
+
+  <input type="number" id="jumlah" placeholder="Jumlah Kelompok" min="2" max="36"><br>
+  <input type="checkbox" id="rata-perempuan" checked> Perempuan Rata<br>
+  <button onclick="bagiKelompok()">Bagi!</button>
+
+  <div class="row">
+
+  </div>
+
+  <script>
+    let data = [];
+
+    async function getData() {
+      if (!data.length) {
+        data = await (await fetch('./murid.json')).json()
+      }
+
+      return data
+    }
+
+    async function bagiKelompok() {
+      const murid = await getData()
+      const jumlah = document.getElementById("jumlah").value
+      const rata = document.getElementById("rata-perempuan").checked
+
+      if (!jumlah) return;
+
+      const hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
+
+      render(hasil)
+    }
+
+    async function bagiRata(murid, jumlah) {
+      const laki = shuffle(shuffle(murid.filter(m => m.kelamin == "l")))
+      const perempuan = shuffle(shuffle(murid.filter(m => m.kelamin == "p")))
+
+      const kelompok = []
+
+      // entah kenapa gk bisa gini -> Array(jumlah).fill().map(() => [])
+      for (let i = 0; i < jumlah; i++) {
+        kelompok.push([])
+      }
+
+      let i = 0;
+
+      while (laki.length || perempuan.length) {
+        if (laki.length) kelompok[i].push(laki.pop())
+        else kelompok[i].push(perempuan.pop())
+
+        i++;
+        if (i >= jumlah) i = 0;
+      }
+
+      return kelompok
+    }
+
+    async function bagiAcak(murid, jumlah) {
+      const acak = shuffle(shuffle(shuffle(murid)))
+
+      return kelompokan(acak, murid.length / jumlah)
+    }
+
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+
+      return a;
+    }
+
+    function kelompokan(array, size) {
+      const chunked_arr = [];
+      const copied = [...array];
+      const numOfChild = Math.ceil(copied.length / size);
+
+      for (let i = 0; i < numOfChild; i++) {
+        chunked_arr.push(copied.splice(0, size));
+      }
+
+      return chunked_arr;
+    }
+
+    function render(data) {
+      const container = document.getElementsByClassName("row")[0]
+      container.innerHTML = ''
+
+      for (let d of data) {
+        const divKelompok = document.createElement("div")
+        const card = document.createElement("div")
+        const ul = document.createElement("ul")
+
+        divKelompok.className = "col"
+        card.className = "card"
+
+        for (let murid of d) {
+          let li = document.createElement("li")
+          let textNode = document.createTextNode(murid.nama)
+
+          li.appendChild(textNode)
+          ul.appendChild(li)
+        }
+
+        card.appendChild(ul)
+        divKelompok.appendChild(card)
+        container.appendChild(divKelompok)
+      }
+
+    }
+
+  </script>
+</body>
+
+</html>
