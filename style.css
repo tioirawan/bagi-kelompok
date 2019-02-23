@@ -68,7 +68,6 @@ ul {
 
 .row {
     text-align: center;
-    height: 450px;
     margin: 20px 10vh 0;
 }
 
@@ -86,11 +85,15 @@ ul {
 }
 
 @media screen and (max-width: 600px) {
+    .row {
+        margin: 20px 10vh 0;
+    }
+    
     .col {
         width: 100%;
         display: block;
         margin-bottom: 20px;
-   }
+    }
 }
 
 .card {

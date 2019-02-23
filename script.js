@@ -37,11 +37,12 @@ async function bagiKelompok() {
   const jumlah = document.getElementById("jumlah").value
   const rata = document.getElementById("rata-perempuan").checked
 
-  if (!jumlah) return;
+  const murid = await getData()
+
+  if (!jumlah || jumlah > murid.length) return;
 
   startLoading()
 
-  const murid = await getData()
 
   let hasil
 
