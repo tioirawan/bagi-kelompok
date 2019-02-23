@@ -1,6 +1,4 @@
-.row,
-.col,
-.card {
+.row, .col, .card {
     box-sizing: border-box;
 }
 
@@ -23,7 +21,6 @@ input[type="number"] {
     width: 10em;
     height: 2.5em;
     text-align: center;
-    /* background-color: rgba(0, 0, 0, 0.2); */
     color: #2c3e50;
     font-size: 1em;
     font-weight: 900;
@@ -39,18 +36,17 @@ button {
     color: inherit;
     font-weight: bold;
     width: 8em;
-    transition: 100ms
+    transition: 100ms 
 }
 
 button:hover {
-    box-shadow: 0 10px 45px rgba(0,0,0,0.30), 0 6px 15px rgba(0,0,0,0.22);    
+    box-shadow: 0 10px 45px rgba(0,0,0,0.30), 0 6px 15px rgba(0,0,0,0.22);
     transform: scale(1.07);
 }
 
 button:active {
-    
     box-shadow: 0 0 38px rgba(0,0,0,0.30), 0 0 12px rgba(0,0,0,0.22);
-  transform: translateY(4px);
+    transform: translateY(4px);
 }
 
 ul {
@@ -67,8 +63,8 @@ ul {
     border-top: solid #2980b9;
     border-right: solid #2980b9;
     font-weight: 1000;
-
-    padding-bottom: 4px;}
+    padding-bottom: .23em;
+}
 
 .row {
     text-align: center;
@@ -91,10 +87,10 @@ ul {
 
 @media screen and (max-width: 600px) {
     .col {
-    width: 100%;
-    display: block;
-    margin-bottom: 20px;
-    }
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+   }
 }
 
 .card {
@@ -112,5 +108,5 @@ li {
 
 li:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 1000px;
 }

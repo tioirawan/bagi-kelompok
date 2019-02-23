@@ -24,7 +24,7 @@ function copyHasil() {
     hasil += `Kelompok ${index++}:\n`
 
     for(let murid of kelompok) {
-      hasil += `${murid.nama}\n`
+      hasil += `${murid.nama} (${murid.no})\n`
     }
 
     hasil += "\n"
@@ -145,7 +145,7 @@ function render(data) {
 
     for (let murid of d) {
       let li = document.createElement("li")
-      let textNode = document.createTextNode(murid.nama)
+      let textNode = document.createTextNode(`${murid.nama} / ${murid.no}`)
 
       li.appendChild(textNode)
       ul.appendChild(li)
