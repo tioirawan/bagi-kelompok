@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Itim');
+
 .row, .col, .card {
     box-sizing: border-box;
 }
@@ -6,7 +8,24 @@ body {
     text-align: center;
     background-color: #34495e;
     color: #ecf0f1;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Itim', cursive;
+}
+
+h1 {
+    margin-top: 20px;
+    font-size: 3.5em;
+}
+
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 3em;
+    }
+}
+
+@media screen and (max-width: 315px) {
+    h1 {
+        font-size: 2.5em;
+    }
 }
 
 input, button, .card {
@@ -54,6 +73,10 @@ ul {
     padding-left: 0;
 }
 
+.colom {
+    margin-top: 20px;
+}
+
 .kel {
     margin-bottom: 100px;
     padding: 10px;
@@ -61,11 +84,15 @@ ul {
     border-radius: 5px 5px 0 0;
     border-left: solid #2980b9;
     border-top: solid #2980b9;
-    border-right: solid #2980b9;
+    border-right: solid #2980b9;;
     font-weight: 1000;
     padding-bottom: .23em;
 }
 
+.container {
+    padding: 10px 20px;
+}
+/* 
 .row {
     text-align: center;
     margin: 20px 10vh 0;
@@ -94,7 +121,7 @@ ul {
         display: block;
         margin-bottom: 20px;
     }
-}
+} */
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -102,6 +129,8 @@ ul {
     border: solid #2980b9;
     border-radius: 10px;
     transition: 100ms;
+    background-color: inherit;
+    padding: 10px 10px 0px;
 }
 
 li {
@@ -113,3 +142,8 @@ li:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
+
+footer {
+    margin: 10px 0 3px;
+}
+

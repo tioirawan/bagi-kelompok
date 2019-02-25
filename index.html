@@ -7,23 +7,35 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bagi Kelompok</title>
 
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/loading.css">
+  <link rel="stylesheet" href="style/checkbox.css">
 </head>
 
 <body>
   <h1>Bagi Kelompok</h1>
 
-  <input type="number" id="jumlah" placeholder="Jumlah Kelompok" min="2" max="36" autofocus><br>
-  <input type="checkbox" id="rata-perempuan" checked> Perempuan Rata<br>
+  <input type="number" id="jumlah" placeholder="Jumlah Kelompok" value="6" min="2" max="36" autofocus><br>
+  <input type="checkbox" id="rata-perempuan" checked>
+  <label for="rata-perempuan">Perempuan Rata</label><br>
   <button onclick="bagiKelompok()">Bagi!</button>
   <button onclick="copyHasil()">Copy Hasil</button>
 
-  <div class="row" id="container">
-    <!-- Semua akan ditampilkan disini -->
+  <div class="container">
+    <div class="row" id="container">
+      <!-- Semua akan ditampilkan disini -->
+    </div>
   </div>
-
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-  <script src="./script.js"></script>
+  <script src="script/script.js"></script>
+
+  <footer>
+    Copyright &copy; 2019 X RPL A SMK Negeri 8 Malang
+  </footer>
 </body>
 
 </html>
