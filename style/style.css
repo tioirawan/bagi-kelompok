@@ -147,3 +147,17 @@ footer {
     margin: 10px 0 3px;
 }
 
+button:disabled {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(228, 103, 103, 0.2);
+    color: hsla(192, 15%, 94%, 0.2);
+    
+    box-shadow: 0 0 38px rgba(0,0,0,0.30), 0 0 12px rgba(0,0,0,0.2);
+    transform: scale(1) translateY(4px);
+}
+
+button:disabled:hover {
+    box-shadow: 0 0 38px rgba(0,0,0,0.30), 0 0 12px rgba(0,0,0,0.2);
+    transform: scale(1) translateY(4px);
+}
+

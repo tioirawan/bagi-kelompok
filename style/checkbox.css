@@ -23,6 +23,7 @@
     height: 18px;
     border: 1px solid #ddd;
     background: #fff;
+    border-radius: 3px;
 }
 [type="checkbox"]:checked + label:after,
 [type="checkbox"]:not(:checked) + label:after {
@@ -35,6 +36,7 @@
     left: 6px;
     -webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;
+    border-radius: 2px;
 }
 [type="checkbox"]:not(:checked) + label:after {
     opacity: 0;

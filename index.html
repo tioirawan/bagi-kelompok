@@ -21,8 +21,10 @@
   <input type="number" id="jumlah" placeholder="Jumlah Kelompok" value="6" min="2" max="36" autofocus><br>
   <input type="checkbox" id="rata-perempuan" checked>
   <label for="rata-perempuan">Perempuan Rata</label><br>
-  <button onclick="bagiKelompok()">Bagi!</button>
-  <button onclick="copyHasil()">Copy Hasil</button>
+  <input type="checkbox" id="sembunyi">
+  <label for="sembunyi">Sembunyikan Hasil</label><br>
+  <button onclick="bagiKelompok()" id="btBagi">Bagi!</button>
+  <button onclick="copyHasil()" id="btCopy" disabled>Copy Hasil</button>
 
   <div class="container">
     <div class="row" id="container">
@@ -34,7 +36,7 @@
   <script src="script/script.js"></script>
 
   <footer>
-    Copyright &copy; 2019 X RPL A SMK Negeri 8 Malang
+    Copyright &copy; 2019 X RPL A SMK Negeri 8 Malang - Code With &hearts; by <a href="//github.com/indmind">dvync</a>
   </footer>
 </body>
 

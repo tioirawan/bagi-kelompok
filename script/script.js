@@ -6,7 +6,14 @@ let temp = [];
 
 // menghitung jumlah pengacakan tiap pembagian untuk menghindari infinite loop
 let count = 0;
-let maxCount = 50; // jumlah maksimal pengacakan tiap pembagian
+const maxCount = 50; // jumlah maksimal pengacakan tiap pembagian
+
+const btCopy = document.getElementById("btCopy")
+const btBagi = document.getElementById("btBagi")
+const container = document.getElementById('container');
+const inpJumlah = document.getElementById('jumlah');
+const inpRata = document.getElementById('rata-perempuan');
+const inpSembunyi = document.getElementById('sembunyi');
 
 async function getData() {
   if (!data.length) {
@@ -17,14 +24,16 @@ async function getData() {
 }
 
 function copyHasil() {
+  if(!temp.length) return
+
   let hasil = '';
   let index = 1;
 
   for (let kelompok of temp) {
-    hasil += `Kelompok ${index++}:\n`;
+    hasil += `*Kelompok ${index++}:*\n`;
 
     for (let murid of kelompok) {
-      hasil += `${murid.nama} (${murid.no})\n`;
+      hasil += `- ${murid.nama} (${murid.no})\n`;
     }
 
     hasil += '\n';
@@ -34,27 +43,52 @@ function copyHasil() {
 }
 
 async function bagiKelompok() {
-  const jumlah = document.getElementById('jumlah').value;
-  const rata = document.getElementById('rata-perempuan').checked;
+  btBagi.setAttribute('disabled', '')
+
+  const jumlah = inpJumlah.value;
+  const rata = inpRata.checked;
+  const sembunyi = inpSembunyi.checked;
 
   const murid = await getData();
 
+  let delaytime = 30
+  let increaser = 1
+
   if (!jumlah || jumlah > murid.length) return;
 
-  startLoading();
+  const jumlahPengulangan = 50 + Math.floor(Math.random() * 50);
 
   let hasil;
 
-  do {
-    hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
+  for (let i = 0; i < jumlahPengulangan; i++) {
+    do {
+      hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
 
-    await delay(100); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
-  } while (cekKesamaan(hasil, temp) && count++ < maxCount);
+      await delay(delaytime += (increaser += 0.1)); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
+    } while (cekKesamaan(hasil, temp) && count++ < maxCount);
+
+    count = 0; // reset count
+
+    if (!sembunyi || !(i >= jumlahPengulangan - 1)) render(hasil);
+    else {
+      if (i >= jumlahPengulangan - 1) {
+        container.innerHTML = "<h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2>"
+      }
+    }
+  }
 
   temp = hasil;
-  count = 0; // reset count
+  btCopy.removeAttribute('disabled')
 
-  render(hasil);
+  const waitTime = 60 // s
+
+  for(let i = 0; i < waitTime; i++) {
+    btBagi.innerText = waitTime - i
+    await delay(1000)
+  }
+
+  btBagi.innerText = "Bagi!"
+  btBagi.removeAttribute('disabled')
 }
 
 async function bagiRata(murid, jumlah) {
@@ -127,8 +161,6 @@ function kelompokan(array, size) {
 }
 
 function render(data) {
-  const container = document.getElementById('container');
-
   container.innerHTML = '';
 
   let index = 1;
@@ -186,9 +218,3 @@ function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
-// menampilkan loading
-function startLoading() {
-  document.getElementById('container').innerHTML = `
-  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-  `;
-}
