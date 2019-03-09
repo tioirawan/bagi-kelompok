@@ -83,11 +83,9 @@ async function bagiKelompok() {
     count = 0; // reset count
 
     if (!sembunyi || !(i >= jumlahPengulangan - 1)) render(hasil);
-    else {
-      if (i >= jumlahPengulangan - 1) {
-        container.style.display = "block"
-        container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
-      }
+    else if (i >= jumlahPengulangan - 1) {
+      container.style.display = "block"
+      container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
     }
 
     await delay(delaytime += (increaser += 0.1)); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
@@ -215,18 +213,24 @@ function render(data) {
 
 function copyToClipboard(str) {
   const el = document.createElement('textarea');
-  el.value = str;
+
   el.setAttribute('readonly', '');
+
+  el.value = str;
   el.style.position = 'absolute';
   el.style.left = '-9999px';
+
   document.body.appendChild(el);
+
   const selected =
     document.getSelection().rangeCount > 0
       ? document.getSelection().getRangeAt(0)
       : false;
+
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
+  
   if (selected) {
     document.getSelection().removeAllRanges();
     document.getSelection().addRange(selected);
