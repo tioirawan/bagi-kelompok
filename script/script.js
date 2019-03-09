@@ -6,7 +6,9 @@ let temp = [];
 
 // menghitung jumlah pengacakan tiap pembagian untuk menghindari infinite loop
 let count = 0;
-const maxCount = 50; // jumlah maksimal pengacakan tiap pembagian
+const maxCount = 10; // jumlah maksimal pengacakan tiap pembagian
+
+let gTotal = 0
 
 const btCopy = document.getElementById("btCopy")
 const btBagi = document.getElementById("btBagi")
@@ -14,6 +16,7 @@ const container = document.getElementById('container');
 const inpJumlah = document.getElementById('jumlah');
 const inpRata = document.getElementById('rata-perempuan');
 const inpSembunyi = document.getElementById('sembunyi');
+const snackbar = document.getElementById("snackbar");
 
 async function getData() {
   if (!data.length) {
@@ -24,7 +27,7 @@ async function getData() {
 }
 
 function copyHasil() {
-  if(!temp.length) return
+  if (!temp.length) return
 
   let hasil = '';
   let index = 1;
@@ -40,10 +43,17 @@ function copyHasil() {
   }
 
   copyToClipboard(hasil);
+
+  snackbar.className = "show";
+
+  setTimeout(
+    () => snackbar.className = snackbar.className.replace("show", ""),
+    3000);
 }
 
 async function bagiKelompok() {
   btBagi.setAttribute('disabled', '')
+  btCopy.setAttribute('disabled', '')
 
   const jumlah = inpJumlah.value;
   const rata = inpRata.checked;
@@ -60,11 +70,14 @@ async function bagiKelompok() {
 
   let hasil;
 
+  container.style.display = "flex"
+
   for (let i = 0; i < jumlahPengulangan; i++) {
     do {
       hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
 
-      await delay(delaytime += (increaser += 0.1)); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
+      gTotal++
+
     } while (cekKesamaan(hasil, temp) && count++ < maxCount);
 
     count = 0; // reset count
@@ -72,17 +85,23 @@ async function bagiKelompok() {
     if (!sembunyi || !(i >= jumlahPengulangan - 1)) render(hasil);
     else {
       if (i >= jumlahPengulangan - 1) {
-        container.innerHTML = "<h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2>"
+        container.style.display = "block"
+        container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
       }
     }
+
+    await delay(delaytime += (increaser += 0.1)); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
   }
 
   temp = hasil;
   btCopy.removeAttribute('disabled')
 
+  console.log(gTotal)
+  gTotal = 0
+
   const waitTime = 60 // s
 
-  for(let i = 0; i < waitTime; i++) {
+  for (let i = 0; i < waitTime; i++) {
     btBagi.innerText = waitTime - i
     await delay(1000)
   }

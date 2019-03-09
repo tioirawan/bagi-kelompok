@@ -13,6 +13,7 @@ node_modules/.bin/postcss style/*.css --use autoprefixer -d csstemp
 node_modules/.bin/uglifycss csstemp/style.css > dist/style/style.css
 node_modules/.bin/uglifycss csstemp/loading.css > dist/style/loading.css
 node_modules/.bin/uglifycss csstemp/checkbox.css > dist/style/checkbox.css
+node_modules/.bin/uglifycss csstemp/snackbar.css > dist/style/snackbar.css
 
 rm -rf csstemp
 
