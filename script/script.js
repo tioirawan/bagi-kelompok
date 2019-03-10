@@ -114,11 +114,6 @@ async function bagiKelompok() {
 }
 
 async function bagiRata(murid, jumlah) {
-  const laki = murid.filter(m => m.kelamin == 'l');
-  const perempuan = murid.filter(m => m.kelamin == 'p');
-
-  const portion = random(2, Math.floor(perempuan.length * 0.8))
-
   const randomizeChunk = c => {
     for (let i = 0; i < random(1, 5); i++) {
       c = shuffle(c)
@@ -126,6 +121,11 @@ async function bagiRata(murid, jumlah) {
 
     return c
   }
+
+  const laki = randomizeChunk(murid.filter(m => m.kelamin == 'l'));
+  const perempuan = randomizeChunk(murid.filter(m => m.kelamin == 'p'));
+
+  const portion = random(2, Math.floor(perempuan.length * 0.8))
 
   const lakiChunks = randomizeChunk(chunk(laki, portion).map(randomizeChunk))
   const perempuanChunks = randomizeChunk(chunk(perempuan, portion).map(randomizeChunk))
