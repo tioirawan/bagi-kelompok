@@ -8,7 +8,7 @@ let temp = [];
 let count = 0;
 const maxCount = 10; // jumlah maksimal pengacakan tiap pembagian
 
-let gTotal = 0
+let gTotal = lTotal = 0
 
 const btCopy = document.getElementById("btCopy")
 const btBagi = document.getElementById("btBagi")
@@ -52,9 +52,6 @@ function copyHasil() {
 }
 
 async function bagiKelompok() {
-  btBagi.setAttribute('disabled', '')
-  btCopy.setAttribute('disabled', '')
-
   const jumlah = inpJumlah.value;
   const rata = inpRata.checked;
   const sembunyi = inpSembunyi.checked;
@@ -66,6 +63,9 @@ async function bagiKelompok() {
 
   if (!jumlah || jumlah > murid.length) return;
 
+  btBagi.setAttribute('disabled', '')
+  btCopy.setAttribute('disabled', '')
+
   const jumlahPengulangan = 50 + Math.floor(Math.random() * 50);
 
   let hasil;
@@ -73,29 +73,34 @@ async function bagiKelompok() {
   container.style.display = "flex"
 
   for (let i = 0; i < jumlahPengulangan; i++) {
+    const isLastLoop = i >= jumlahPengulangan - 1
+
     do {
-      hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
+      if (isLastLoop) {
+        hasil = await (rata ? bagiRata(murid, jumlah) : bagiAcak(murid, jumlah));
+      } else {
+        hasil = await bagiAcak(murid, jumlah) // hanya untuk efek mengacak, gk perlu banyak"
+      }
 
       gTotal++
-
-    } while (cekKesamaan(hasil, temp) && count++ < maxCount);
+    } while (isLastLoop ? cekKesamaan(hasil, temp) && count++ < maxCount : false);
 
     count = 0; // reset count
 
-    if (!sembunyi || !(i >= jumlahPengulangan - 1)) render(hasil);
-    else if (i >= jumlahPengulangan - 1) {
+    if (!sembunyi || !(isLastLoop)) render(hasil); // tampilkan
+    else if (isLastLoop) {
       container.style.display = "block"
       container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
     }
 
-    await delay(delaytime += (increaser += 0.1)); // delay 0.1s tiap pengacakan (max 10 acakan/detik)
+    await delay(delaytime += (increaser += 0.1)); // exponen
   }
 
   temp = hasil;
   btCopy.removeAttribute('disabled')
 
-  console.log(gTotal)
-  gTotal = 0
+  console.log(gTotal, lTotal)
+  gTotal = lTotal = 0
 
   const waitTime = 60 // s
 
@@ -109,10 +114,24 @@ async function bagiKelompok() {
 }
 
 async function bagiRata(murid, jumlah) {
-  const laki = shuffle(shuffle(shuffle(murid.filter(m => m.kelamin == 'l'))));
-  const perempuan = shuffle(
-    shuffle(shuffle(murid.filter(m => m.kelamin == 'p')))
-  );
+  const laki = murid.filter(m => m.kelamin == 'l');
+  const perempuan = murid.filter(m => m.kelamin == 'p');
+
+  const portion = random(2, Math.floor(perempuan.length * 0.8))
+
+  const randomizeChunk = c => {
+    for (let i = 0; i < random(1, 5); i++) {
+      c = shuffle(c)
+    }
+
+    return c
+  }
+
+  const lakiChunks = randomizeChunk(chunk(laki, portion).map(randomizeChunk))
+  const perempuanChunks = randomizeChunk(chunk(perempuan, portion).map(randomizeChunk))
+
+  const lakiRes = lakiChunks.reduce((acc, cur) => [...acc, ...cur])
+  const perempuanRes = perempuanChunks.reduce((acc, cur) => [...acc, ...cur])
 
   const kelompok = [];
 
@@ -123,9 +142,9 @@ async function bagiRata(murid, jumlah) {
 
   let i = 0;
 
-  while (laki.length || perempuan.length) {
-    if (laki.length) kelompok[i].push(laki.pop());
-    else kelompok[i].push(perempuan.pop());
+  while (lakiRes.length || perempuanRes.length) {
+    if (lakiRes.length) kelompok[i].push(lakiRes.pop());
+    else kelompok[i].push(perempuanRes.pop());
 
     i++;
     if (i >= jumlah) i = 0;
@@ -157,12 +176,24 @@ function cekKesamaan(a, b) {
 }
 
 function shuffle(a) {
+  lTotal++
+
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
 
   return a;
+}
+
+function chunk(array, size) {
+  const chunked_arr = [];
+  let copied = [...array];
+  const numOfChild = Math.ceil(copied.length / size);
+  for (let i = 0; i < numOfChild; i++) {
+    chunked_arr.push(copied.splice(0, size));
+  }
+  return chunked_arr;
 }
 
 function kelompokan(array, size) {
@@ -230,7 +261,7 @@ function copyToClipboard(str) {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
-  
+
   if (selected) {
     document.getSelection().removeAllRanges();
     document.getSelection().addRange(selected);
@@ -239,5 +270,9 @@ function copyToClipboard(str) {
 
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
+}
+
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
