@@ -4,8 +4,8 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "deploy": "npm run build && babel script -d dist/script && npm run publish",
-    "build": "./build.sh",
+    "deploy": "npm run build && npm run publish",
+    "build": "./build.sh && babel script -d dist/script",
     "publish": "surge dist bagi-kelompok-xra.surge.sh"
   },
   "repository": {
