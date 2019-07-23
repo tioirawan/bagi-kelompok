@@ -87,8 +87,9 @@ async function bagiKelompok() {
 
     count = 0; // reset count
 
-    if (!sembunyi || !(isLastLoop)) render(hasil); // tampilkan
-    else if (isLastLoop) {
+    if (!sembunyi || !(isLastLoop)) {
+      render(shuffle(hasil)); // tampilkan
+    } else if (isLastLoop) {
       container.style.display = "block"
       container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
     }
