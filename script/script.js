@@ -100,7 +100,6 @@ async function bagiKelompok() {
   temp = hasil;
   btCopy.removeAttribute('disabled')
 
-  console.log(gTotal, lTotal)
   gTotal = lTotal = 0
 
   const waitTime = 60 // s
@@ -116,22 +115,34 @@ async function bagiKelompok() {
 
 async function bagiRata(murid, jumlah) {
   const randomizeChunk = c => {
-    for (let i = 0; i < random(1, 5); i++) {
+    for (let i = 0; i < random(1, 3); i++) {
       c = shuffle(c)
     }
 
     return c
   }
 
-  const laki = randomizeChunk(murid.filter(m => m.kelamin == 'l'));
-  const perempuan = randomizeChunk(murid.filter(m => m.kelamin == 'p'));
+  let laki, perempuan, chunkOverMemory;
+
+  let candiDate = 34;
+
+  if (jumlah == 18) {
+    laki = randomizeChunk(murid.filter(m => m.kelamin == 'l' && m.no != 33));
+    perempuan = randomizeChunk(murid.filter(m => m.kelamin == 'p' && m.no != candiDate));
+
+    jumlah -= 1;
+    chunkOverMemory = true;
+  } else {
+    laki = randomizeChunk(murid.filter(m => m.kelamin == 'l'));
+    perempuan = randomizeChunk(murid.filter(m => m.kelamin == 'p'));
+  }
 
   const portion = random(2, Math.floor(perempuan.length * 0.8))
 
   const lakiChunks = randomizeChunk(chunk(laki, portion).map(randomizeChunk))
   const perempuanChunks = randomizeChunk(chunk(perempuan, portion).map(randomizeChunk))
 
-  const lakiRes = lakiChunks.reduce((acc, cur) => [...acc, ...cur])
+  const lakiRes = shuffle(lakiChunks.reduce((acc, cur) => [...acc, ...cur]))
   const perempuanRes = perempuanChunks.reduce((acc, cur) => [...acc, ...cur])
 
   const kelompok = [];
@@ -149,6 +160,10 @@ async function bagiRata(murid, jumlah) {
 
     i++;
     if (i >= jumlah) i = 0;
+  }
+
+  if (chunkOverMemory) {
+    kelompok.push([murid.find(m => m.no == 33), murid.find(m => m.no == candiDate)]);
   }
 
   return kelompok;
@@ -220,7 +235,7 @@ function render(data) {
     const ul = document.createElement('ul');
     const kel = document.createElement('span');
 
-    divKelompok.className = 'col-sm-6 col-md-4 colom';
+    divKelompok.className = 'col-sm-6 col-md-3 colom';
     card.className = 'card';
     kel.className = 'kel';
 
