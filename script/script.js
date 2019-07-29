@@ -87,8 +87,10 @@ async function bagiKelompok() {
 
     count = 0; // reset count
 
+    hasil = shuffle(hasil)
+
     if (!sembunyi || !(isLastLoop)) {
-      render(shuffle(hasil)); // tampilkan
+      render(hasil); // tampilkan
     } else if (isLastLoop) {
       container.style.display = "block"
       container.innerHTML = "<center><h2>Pengacakan Selesai, Silahkan Copy Hasil!</h2></center>"
@@ -114,6 +116,8 @@ async function bagiKelompok() {
 }
 
 async function bagiRata(murid, jumlah) {
+  const segmentationMemory = false;
+
   const randomizeChunk = c => {
     for (let i = 0; i < random(1, 3); i++) {
       c = shuffle(c)
@@ -126,7 +130,7 @@ async function bagiRata(murid, jumlah) {
 
   let candiDate = 34;
 
-  if (jumlah == 18) {
+  if (jumlah == 18 && segmentationMemory) {
     laki = randomizeChunk(murid.filter(m => m.kelamin == 'l' && m.no != 33));
     perempuan = randomizeChunk(murid.filter(m => m.kelamin == 'p' && m.no != candiDate));
 
